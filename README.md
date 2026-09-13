@@ -48,3 +48,10 @@ python -m unittest discover -s tests -v
 測試涵蓋數量、同碼多事件、重送去重、多碼分組、上限、撤銷、來源欄位、時區與 Streamlit AppTest 操作。AppTest 不代表瀏覽器版面驗收。上線前仍須實際檢視 1920、1600、1366、1024 與手機寬度，以及放大文字時是否溢出。
 
 數量與進度日期使用 Asia/Taipei（UTC+08:00）。示範只還原說明所需的核心行為，未直接搬入正式 SAP 或 Windows 程式。
+
+
+## 畫面預覽
+
+![KAI 作品集畫面](assets/portfolio-preview.png)
+
+此圖是實際程式的本機預覽。Streamlit 網站網址待完成帳號部署後補上。
