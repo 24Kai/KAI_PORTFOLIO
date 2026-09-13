@@ -81,7 +81,8 @@ class AppTests(unittest.TestCase):
 
     def test_all_cases_and_methods_render(self):
         app = self.start()
-        for index in range(4):
+        app.radio(key="page").set_value("3～5 分鐘看作品").run()
+        for index in range(14):
             app.selectbox(key="case").select_index(index).run()
             self.assertEqual(len(app.exception), 0)
         app.radio(key="page").set_value("設計方法").run()

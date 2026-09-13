@@ -5,6 +5,7 @@ from pathlib import Path
 from uuid import uuid4
 
 import streamlit as st
+import casebook_ui
 
 from demo_logic import (Counter, MINUS_QR, PLUS_QR, metrics, now_taipei,
                         progress_palette, sample_orders, validate_report_columns)
@@ -25,7 +26,7 @@ CSS = """
 .brand strong {font-size:1.15rem;color:#eef6fc;letter-spacing:.18em}
 .hero {background:linear-gradient(112deg,#13263c,#133c51 62%,#155854);border:1px solid #2b5464;border-radius:24px;padding:clamp(1.5rem,4vw,3.5rem);margin-bottom:1.6rem}
 .eyebrow {color:#78e7d6;font-size:.76rem;letter-spacing:.18em;font-weight:700;margin:0 0 1.2rem}
-.hero h1 {font-size:clamp(2rem,3.7vw,3.35rem);line-height:1.45;max-width:950px;color:#fff;letter-spacing:.01em;margin:0 0 1.1rem;overflow-wrap:anywhere}
+.hero h1 {text-wrap:balance;font-size:clamp(2rem,3.7vw,3.35rem);line-height:1.45;max-width:950px;color:#fff;letter-spacing:.01em;margin:0 0 1.1rem;overflow-wrap:anywhere}
 .hero p {color:#cad9e6;max-width:780px;line-height:1.85;margin:0;font-size:1.03rem}
 .chips {display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.4rem}
 .chip {border:1px solid #487078;border-radius:999px;padding:.28rem .8rem;color:#d2f8f1;font-size:.8rem}
@@ -108,22 +109,7 @@ def banner(title):
 
 
 def overview():
-    section("SELECTED WORK", "四個專案，同一條思考路徑", "先釐清作業與資料，再把流程做成看得懂、用得上的工具。")
-    cards = []
-    for p in CONTENT["projects"]:
-        tags = ''.join(f'<span>{escape(tag)}</span>' for tag in p["technology"])
-        cards.append(f'<article class="project-card"><div class="project-meta"><span>{escape(p["category"])}</span>'
-                     f'<b>{escape(p["number"])}</b></div><h3>{escape(p["title"])}</h3>'
-                     f'<p>{escape(p["summary"])}</p><div class="tech">{tags}</div></article>')
-    html('<div class="project-grid">' + ''.join(cards) + '</div>')
-    section("CASE STUDY", "從需求走到設計", "選擇一個專案，查看背後的問題與取捨。")
-    selected = st.selectbox("專案案例", CONTENT["projects"], format_func=lambda p: p["title"], key="case")
-    html(f'<div class="detail-grid"><div class="detail-panel"><b>需要解決的問題</b>{escape(selected["problem"])}</div>'
-         f'<div class="detail-panel"><b>採用的做法</b>{escape(selected["approach"])}</div></div>')
-    for decision in selected["decisions"]:
-        st.markdown(f"- {decision}")
-    if selected["demo"]:
-        st.caption(f'切換上方「互動體驗」，選擇「{selected["demo"]}」即可試用核心流程。')
+    casebook_ui.overview(CONTENT)
 
 
 def counter_action(token):
@@ -250,12 +236,17 @@ def methods():
     st.write("用 AI 協助整理需求、閱讀程式、比較方案與建立測試；保留來源及決策紀錄，並以實際程式行為和操作結果確認是否完成。")
 
 
+casebook_ui.sync_route(CONTENT)
 profile = CONTENT["profile"]
 html(f'<div class="brand"><strong>{escape(profile["name"])} / PORTFOLIO</strong><span>流程・資料・自動化</span></div>')
-html(f'<div class="hero"><div class="eyebrow">{escape(profile["eyebrow"])}</div><h1>{escape(profile["headline"])}</h1>'
-     f'<p>{escape(profile["intro"])}</p><div class="chips">' + ''.join(f'<span class="chip">{escape(tag)}</span>' for tag in profile["focus"]) + '</div></div>')
-page = st.radio("作品集導覽", ("作品總覽", "互動體驗", "設計方法"), horizontal=True, key="page", label_visibility="collapsed")
-{"作品總覽": overview, "互動體驗": demos, "設計方法": methods}[page]()
+if st.session_state.get("page", "作品總覽") != casebook_ui.CASE_PAGE:
+    html(f'<div class="hero"><div class="eyebrow">{escape(profile["eyebrow"])}</div><h1>{escape(profile["headline"])}</h1>'
+         f'<p>{escape(profile["intro"])}</p><div class="chips">' + ''.join(f'<span class="chip">{escape(tag)}</span>' for tag in profile["focus"]) + '</div></div>')
+page = st.radio("作品集導覽", ("作品總覽", casebook_ui.CASE_PAGE, "互動體驗", "設計方法"), horizontal=True, key="page", label_visibility="collapsed", on_change=casebook_ui.nav_changed)
+if page == casebook_ui.CASE_PAGE:
+    casebook_ui.detail(CONTENT)
+else:
+    {"作品總覽": overview, "互動體驗": demos, "設計方法": methods}[page]()
 github_url = profile.get("github_url", "")
 link = f'<a href="{escape(github_url, quote=True)}" target="_blank" rel="noopener noreferrer">GitHub ↗</a>' if github_url.startswith("https://github.com/") else ""
 html(f'<div class="footer"><span>KAI · 流程、資料與自動化作品集<br>互動展示使用合成資料</span>{link}</div>')

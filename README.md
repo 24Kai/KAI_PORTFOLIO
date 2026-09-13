@@ -6,22 +6,21 @@
 
 ## 內容
 
-- 作品總覽：產線生產看板、QR 簡易計數、SAP 報表自動化、AI 工作中控。
-- 案例詳情：問題、做法、設計取捨與技術。
-- 互動體驗：QR 加減計數、工單多碼計數、來源欄位檢核。
-- 設計方法：需求、資料、驗證與紀錄的工作路徑。
+14 個作品涵蓋 SAP 訂單／製造資料整合、n8n 排程、週報與 Outlook、排程異動、Production BI、完整派工看板、背景 QR 計數、製程日期輔助、RFC 替代驗證、來源與維度、Google 試算表、維運中控、AI 工作架構、每日紀錄與每週回顧。
 
-公開示範只保留在各訪客的 Streamlit session。重新連線或伺服器重啟可能重置；示範不是正式生產系統，不具備 Windows 背景接收、現場匯入、正式歸檔與公司連線。
+每個作品都有獨立的 `?case=...` 連結，以及約 3～5 分鐘的閱讀／體驗路徑：問題、原本與後來、串接理由、合成情境、設計取捨、成果與界線。n8n 的系統分工圖不冒充正式 workflow 匯出，已實作與候選狀態分開描述。
+
+- [完整文字作品集](CASEBOOK.md)：可直接閱讀、供 GPT 參考或用於面試準備。
+- 互動示範：QR 加減、多碼分組、來源檢核、流程中途失敗、逐訂單認列。
+- 下載：單一案例介紹或整本作品集 Markdown；不用登入公司系統。
+
+所有示例都是合成資料，操作只留在訪客自己的工作階段。網站不讀取私人中控、公司 DB 或本機檔案；不執行 SAP、n8n、郵件或 Windows 背景掃碼。不提供未量測的節省工時、效益百分比或公司營運數據。
 
 ## 日後調整
 
-一般文案編輯 `portfolio_content.json`：
+一般文案編輯 `portfolio_content.json`：`profile` 是個人介紹、`projects` 是案例、`principles` 是工作方法。每案包括 `status`、`problem`、`before`、`after`、`role`、`flow`、`connections`、`scenarios`、`decisions`、`outcomes`、`evidence`、`limitation`。
 
-- `profile`：姓名、介紹、標語、領域、GitHub 連結。
-- `projects`：案例摘要、問題、做法、設計取捨、技術。
-- `principles`：工作方法。
-
-尚未確認的個人職稱、年資、公司、聯絡方式或成效數字不預填。請先確認內容可以公開，再補進作品集。私人資料不要放入此儲存庫，包含 Git 歷史。
+編輯後執行 `python export_casebook.py`，同步產生 `CASEBOOK.md`。程式與文案一起 commit / push，網站依發布分支更新。不得放入公司網址、帳密、workflow ID、真實訂單、私人記憶或實際報表。
 
 ## 執行
 
