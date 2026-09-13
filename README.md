@@ -1,5 +1,7 @@
 # KAI 個人作品集
 
+[開啟作品集](https://krtqdtupujerpksubdpac2.streamlit.app/)
+
 可獨立部署至 Streamlit Community Cloud 的繁體中文作品集。公開內容只有專案方法與合成示範資料，不讀取私人中控、SAP、公司資料庫或本機工作檔。
 
 ## 內容
@@ -54,4 +56,4 @@ python -m unittest discover -s tests -v
 
 ![KAI 作品集畫面](assets/portfolio-preview.png)
 
-此圖是實際程式的本機預覽。Streamlit 網站網址待完成帳號部署後補上。
+此圖是實際程式的本機預覽。[線上作品集](https://krtqdtupujerpksubdpac2.streamlit.app/)已完成部署。
